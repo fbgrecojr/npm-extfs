@@ -66,12 +66,19 @@ extfs.isEmpty = function (searchPath, cb) {
         if (err) {
           return cb(true);
         }
+        //if system is running the Apple OS X operating system, every directory may have a .DS_Store file 
+        //https://en.wikipedia.org/wiki/.DS_Store
+        //let's check for that
+        if(items.length == 1 && items[0] == '.DS_Store'){
+            cb(true);
+        }
+          
         cb(!items || !items.length);
       });
     } else {
       fs.readFile(searchPath, function (err, data) {
         if (err) {
-          cb(true);
+          return cb(true);
         }
         cb(!data || !data.length)
       });
@@ -92,6 +99,14 @@ extfs.isEmptySync = function (searchPath) {
   }
   if (stat.isDirectory()) {
     var items = fs.readdirSync(searchPath);
+      
+    //if system is running the Apple OS X operating system, every directory may have a .DS_Store file 
+    //https://en.wikipedia.org/wiki/.DS_Store
+    //let's check for that
+    if(items.length == 1 && items[0] == '.DS_Store'){
+        return cb(true);
+    }
+      
     return !items || !items.length;
   }
   var file = fs.readFileSync(searchPath);
