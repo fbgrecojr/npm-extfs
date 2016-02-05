@@ -70,7 +70,7 @@ extfs.isEmpty = function (searchPath, cb) {
         //https://en.wikipedia.org/wiki/.DS_Store
         //let's check for that
         if(items.length == 1 && items[0] == '.DS_Store'){
-            cb(true);
+            return cb(true);
         }
           
         cb(!items || !items.length);
